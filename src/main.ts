@@ -1,3 +1,4 @@
+
 // src/main.ts
 
 import { createApp } from 'vue';
@@ -8,7 +9,11 @@ import  { checkTokenAndSetUser } from '@/middlewares/checkTokenAndSetUser';
 const app = createApp(App);
 
 registerPlugins(app);
+
+
+
 // Vérifier et définir l'utilisateur au démarrage de l'application
 checkTokenAndSetUser();
 
 app.mount('#app');
+

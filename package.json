@@ -14,8 +14,10 @@
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "roboto-fontface": "*",
+    "sweetalert2": "^11.12.1",
     "vue": "^3.4.21",
     "vue-jwt-decode": "^0.1.0",
+    "vue-sweetalert2": "^5.0.11",
     "vuetify": "^3.5.8"
   },
   "devDependencies": {

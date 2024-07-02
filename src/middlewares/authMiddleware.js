@@ -7,7 +7,7 @@ export const authMiddleware = (to, from, next) => {
     if (isAuthenticated) {
       next();
     } else {
-      next('/login');
+      next('/authRequired');
     }
   } else {
     next();

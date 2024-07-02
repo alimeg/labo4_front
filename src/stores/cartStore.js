@@ -1,5 +1,8 @@
+
 import { defineStore } from 'pinia';
 import { useUserStore } from '@/stores/userStore';
+
+import Pokemon from '@/models/pokemons'; // Adjust the path to your Pokemon model
 
 export const useCartStore = defineStore({
   id: 'cart',
@@ -7,23 +10,42 @@ export const useCartStore = defineStore({
     items: []
   }),
   actions: {
-    addToCart(pokemon) {
+    addToCart(pokemonData) {
+      // Verify the data received here
+      console.log('Pokemon data received:', pokemonData);
+
+      // Check the necessary data properties to create an instance of Pokemon
+      if (!pokemonData || !(pokemonData instanceof Pokemon)) {
+        console.error('Invalid or undefined pokemonData:', pokemonData);
+        return;
+      }
+
+      // Create an instance of Pokemon if not already
+      const pokemon = pokemonData instanceof Pokemon ? pokemonData : new Pokemon(pokemonData.id, pokemonData);
+
+      // Check if the Pokemon instance is valid
+      if (!pokemon || !pokemon.id || !pokemon.name || !pokemon.sprites || !pokemon.stats) {
+        console.error('Missing or invalid data properties in Pokemon instance:', pokemon);
+        return;
+      }
+
+      // Find if the Pokemon is already in the cart
       const existingItem = this.items.find(item => item.id === pokemon.id);
       if (existingItem) {
         existingItem.quantity++;
       } else {
-        const hpStat = pokemon.stats.find(stat => stat.stat.name === 'hp');
-        const price = hpStat ? hpStat.base_stat : 0;  // Utiliser 0 si le hp n'est pas trouvé
+        const price = pokemon.getPrice(); // Use getPrice() method of Pokemon
         if (isNaN(price)) {
           console.error(`Invalid price for pokemon: ${pokemon.name}`, pokemon);
         } else {
           this.items.push({ ...pokemon, price: Number(price), quantity: 1 });
         }
       }
+
       console.log('Items after adding:', this.items);
       this.saveCart();
     },
-    
+      
     removeFromCart(pokemonId) {
       const index = this.items.findIndex(item => item.id === pokemonId);
       if (index !== -1) {
@@ -32,9 +54,9 @@ export const useCartStore = defineStore({
         } else {
           this.items.splice(index, 1);
         }
+        console.log('Items after removal:', this.items);
+        this.saveCart();
       }
-      console.log('Items after removal:', this.items);
-      this.saveCart();
     },
     clearCart() {
       this.items = [];
@@ -63,14 +85,17 @@ export const useCartStore = defineStore({
         return total + item.quantity;
       }, 0);
     },
+   
     totalPrice: (state) => {
-      return state.items.reduce((total, item) => {
-        if (isNaN(item.price) || isNaN(item.quantity)) {
-          console.error('Invalid item in cart:', item);
-          return total;
-        }
-        return total + (item.price * item.quantity);
-      }, 0);
-    }
-  }
+        return state.items.reduce((total, item) => {
+          const itemPrice = item.price;
+          return total + (itemPrice * item.quantity);
+        }, 0);
+      }
+  
+}
 });
+
+
+    
+ 

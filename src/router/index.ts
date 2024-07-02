@@ -4,6 +4,8 @@ import Login from '@/pages/Login.vue';
 import Pokemon from '@/pages/pokemons.vue';
 import Membres from '@/pages/Membres.vue';
 import Cart from '@/pages/carte.vue';
+import AuthRequired from '@/pages/AuthRequired.vue';
+
 import { authMiddleware } from '@/middlewares/authMiddleware'; 
 
 
@@ -35,6 +37,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Pokemon',
     component: Pokemon,
   },
+  {
+    path: '/AuthRequired',
+    name: 'AuthRequired',
+    component: AuthRequired,
+  },
+  
   {
     path: '/details/:pokemonId',
     name: 'PokemonDetails',

@@ -9,7 +9,8 @@
             outlined
             clearable
             @input="search"
-            @click:clear="resetSearch">
+            @click:clear="resetSearch"
+          >
             <!-- icône de recherche -->
             <template #append-inner>
               <v-icon>mdi-magnify</v-icon>
@@ -38,24 +39,33 @@
       <!-- Affichage des cartes Pokémon une fois les données chargées -->
       <v-row justify="center">
         <v-col cols="12" sm="6" md="3" v-for="pokemon in paginatedPokemons" :key="pokemon.id">
+          <!-- Passez shouldShowCatchCart en tant que prop show-catch-cart -->
           <PokemonCard :pokemon="pokemon" />
         </v-col>
       </v-row>
     </v-container>
   </template>
-  <!-- Gestion du loading des pokemons en se basant sur les données sauvegardées dans le pokemonStore-->
+  
   <script setup>
   import { ref, computed, onMounted, watch } from "vue";
-  import { usePokemonStore } from '@/stores/pokemonStore';
+  import { useCartStore  } from "@/stores/cartStore";
+  import { usePokemonStore } from "@/stores/pokemonStore";
   import PokemonCard from "@/components/PokemonCard.vue";
   
-  const pokemonStore = usePokemonStore();
+  const pokemonStore = usePokemonStore(); 
   
   const searchQuery = ref("");
   const currentPage = ref(1);
   const pokemonsPerPage = ref(72);
   
-  const totalPages = computed(() => Math.ceil(pokemonStore.pokemons.length / pokemonsPerPage.value));
+  const totalPages = computed(() =>
+    Math.ceil(pokemonStore.pokemons.length / pokemonsPerPage.value)
+  );
+
+ 
+ 
+ 
+  
   const paginatedPokemons = computed(() => {
     const start = (currentPage.value - 1) * pokemonsPerPage.value;
     const end = start + pokemonsPerPage.value;
@@ -68,7 +78,7 @@
   };
   
   const resetSearch = () => {
-    searchQuery.value = '';
+    searchQuery.value = "";
     pokemonStore.resetSearch();
   };
   
@@ -77,7 +87,6 @@
   });
   
   watch(searchQuery, search);
-  
   </script>
   
   <style scoped>

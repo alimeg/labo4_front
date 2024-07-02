@@ -10,6 +10,9 @@ declare module 'vue' {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     HeaderProf: typeof import('./components/HeaderProf.vue')['default']
     PokemonCard: typeof import('./components/PokemonCard.vue')['default']
+    PokemonCard1: typeof import('./components/PokemonCard1.vue')['default']
+    PopUp: typeof import('./components/PopUp.vue')['default']
+    PopUpDialog: typeof import('./components/PopUpDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

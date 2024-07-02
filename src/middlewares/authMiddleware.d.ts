@@ -1,4 +1,4 @@
 declare module '@/middlewares/authMiddleware' {
-    export function authMiddleware(): boolean;
+    export function authMiddleware(swal): boolean;
   }
   

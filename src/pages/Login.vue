@@ -16,6 +16,7 @@
               <v-text-field v-model="loginUsername" label="Email" :rules="emailRules" required></v-text-field>
               <v-text-field v-model="loginPassword" label="Password" type="password" :rules="passwordRules" required></v-text-field>
               <v-btn type="submit" color="primary">Login</v-btn>
+              <v-progress-linear v-if="loginInProgress" indeterminate color="primary"></v-progress-linear>
             </v-form>
 
             
@@ -27,6 +28,7 @@
                <v-text-field v-model="registerLastName" label="Last Name"></v-text-field>
                <v-text-field v-model="registerPhoneNumber" label="Phone Number"></v-text-field>
                <v-btn type="submit" color="primary">Register</v-btn>
+               <v-progress-linear v-if="registerInProgress" indeterminate color="primary"></v-progress-linear>
            </v-form>
           </v-card-text>
         </v-card>
@@ -41,6 +43,15 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import axios from 'axios';
 import VueJwtDecode from 'vue-jwt-decode';
+
+/* Nécessaire avec la configuration actuelle : 
+--- hébergement gratuit du serveur NODE en charge de l'ajout des 
+utilisateurs et leurs Authentification a travers des TOKENS
+INFO: il peut etre mis en mode sleep quand il ne y'a pas dactivités
+-- Aussi du fait que la BDD Mongodb s\'y afferant est hébérgée dans un autre serveur (ATLAS)
+*/
+const loginInProgress = ref(false); // Variable pour indiquer le login en cours
+const registerInProgress = ref(false); // Variable pour indiquer l'enregistrement en cours
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -58,8 +69,8 @@ const loginForm = ref();
 const registerForm = ref();
 
 const emailRules = [
-  v => !!v || 'Email is required',
-  v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+  v => !!v || 'Email est obligatoire',
+
 ];
 
 const passwordRules = [
@@ -82,12 +93,13 @@ const lastNameRules = [
 
 const phoneNumberRules = [
   v => !!v || 'Phone Number is required',
-  v => /^\d{10}$/.test(v) || 'Phone Number must be a valid 10-digit number',
+  v => /^\d{10}$/.test(v) || 'Le numéro de téléphone doit être un numéro valide à 10 chiffres'
 ];
 
 const login = async () => {
   if (loginForm.value.validate()) {
     try {
+      loginInProgress.value = true; // Activation de l'indicateur de progression
       //const response = await axios.post('http://localhost:3011/pokemonlogin', {
         const response = await axios.post('https://labo4-srv1.onrender.com/pokemonlogin', {
         email: loginUsername.value,
@@ -113,12 +125,16 @@ const login = async () => {
       console.error('Error during login:', error);
       alert('An error occurred during login. Please try again later.');
     }
+    finally {
+      loginInProgress.value = false; // Désactivation de l'indicateur de progression
+    }
   }
 };
 
 const register = async () => {
   if (registerForm.value.validate()) {
     try {
+      registerInProgress.value = true; // Activation de l'indicateur de progression
       const requestData = {
         email: registerUsername.value,
         password: registerPassword.value,
@@ -150,6 +166,9 @@ const register = async () => {
         console.error('An unknown error occurred during registration');
         alert('An unknown error occurred during registration');
       }
+    }
+    finally {
+      registerInProgress.value = false; // Désactivation de l'indicateur de progression
     }
   }
 };
