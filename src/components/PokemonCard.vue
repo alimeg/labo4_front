@@ -43,7 +43,7 @@
     router.push(`/details/${props.pokemon.id}`);
   };
   
-// Function to get Pokemon price
+// Function pour recuperer le prix du Pokemon 
 const getPokemonPrice = () => {
   const pokemonInstance = new Pokemon(props.pokemon.id, props.pokemon);
   return pokemonInstance.getPrice();

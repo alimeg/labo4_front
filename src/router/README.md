@@ -1,0 +1,7 @@
+Ce code crée un routeur Vue.js à l'aide de `createRouter` et `createWebHistory` de `vue-router`. Il définit également un tableau de routes avec différents chemins, noms, composants et métadonnées.
+
+La première route est la route par défaut qui redirige vers la page d'accueil. La deuxième route est pour la page d'accueil elle-même, qui est mappée au composant `Home`. La troisième route est pour la page des membres, qui est mappée au composant `Membres` et nécessite une authentification. La quatrième route est pour la page de connexion, qui est mappée au composant `Login`. La cinquième route est pour la page des Pokémons, qui est mappée au composant `Pokemon`. La sixième route est pour la page d'authentification requise, qui est mappée au composant `AuthRequired`.
+
+La septième route est pour la page de détails d'un Pokémon, qui est mappée à un composant chargé dynamiquement à l'aide de la fonction `import()`. Cette route nécessite également une authentification et passe les paramètres de la route en tant que props au composant. Enfin, la huitième route est pour la page du panier, qui est mappée au composant `Cart`.
+
+Le routeur est ensuite créé en utilisant `createRouter` et les routes sont passées en tant que paramètre. Le middleware de navigation `authMiddleware` est également utilisé pour protéger certaines routes. Enfin, le routeur est exporté pour être utilisé dans l'application Vue.js.
